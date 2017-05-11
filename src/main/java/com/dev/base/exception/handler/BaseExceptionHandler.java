@@ -35,7 +35,7 @@ import com.dev.base.utils.MapUtils;
  */
 @Component
 public class BaseExceptionHandler implements HandlerExceptionResolver {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(BaseExceptionHandler.class);
 
 	@Override
@@ -45,10 +45,10 @@ public class BaseExceptionHandler implements HandlerExceptionResolver {
 
 		// 判断是否是ajax请求
 		boolean isAjaxReq = WebUtil.isAjaxReq(request);
-		
+
 		// 组装错误信息
 		Map<String, Object> errorInfo = parseErrorInfo(ex);
-		
+
 		// 组装跳转页面
 		String viewName = parseViewName(ex, isAjaxReq);
 
@@ -60,20 +60,32 @@ public class BaseExceptionHandler implements HandlerExceptionResolver {
 		return mv;
 	}
 
-	// 组装错误信息
+	/**
+	 * 组装错误信息
+	 * 
+	 * @param ex
+	 *            Exception
+	 * @return Map< String, Object >
+	 */
 	private Map<String, Object> parseErrorInfo(Exception ex) {
 		Map<String, Object> errorInfo = MapUtils.newMap();
 		if (ex instanceof BaseRuntimeException) {// 自定义异常
 			BaseRuntimeException exception = (BaseRuntimeException) ex;
 			errorInfo = parseExceptionInfo(exception.getErrorCode(), exception.getErrorMsg(), exception.getData());
-		} else {// 其他异常
+		} else { // 其他异常
 			errorInfo = parseExceptionInfo(ErrorCode.BUSY, null, null);
 		}
 
 		return errorInfo;
 	}
 
-	// 组装跳转的页面
+	/**
+	 * 组装跳转的页面
+	 *  
+	 * @param ex Exception
+	 * @param isAjaxReq boolean
+	 * @return String
+	 */
 	private String parseViewName(Exception ex, boolean isAjaxReq) {
 		// ajax请求对应的页面
 		if (isAjaxReq) {
@@ -82,18 +94,25 @@ public class BaseExceptionHandler implements HandlerExceptionResolver {
 
 		// 非ajax请求对应的页面
 		String viewName = "forward:/jsp/error/error.jsp";
-		if (ex instanceof SessionTimeoutException) {// 登陆超时异常
+		if (ex instanceof SessionTimeoutException) { // 登陆超时异常
 			viewName = "forward:/forwardLogin.htm";
-		} else if (ex instanceof AuthException) {// 无权限异常
+		} else if (ex instanceof AuthException) { // 无权限异常
 			viewName = "forward:/jsp/error/403.jsp";
-		} else if (ex instanceof TipException) {// 用户提示信息异常
+		} else if (ex instanceof TipException) { // 用户提示信息异常
 			viewName = ((TipException) ex).getViewName();
 		}
 
 		return viewName;
 	}
 
-	// 组装异常信息
+	/**
+	 * 组装异常信息
+	 * 
+	 * @param errorCode String
+	 * @param errorMsg String
+	 * @param data Object
+	 * @return Map< String, Object > 
+	 */
 	private Map<String, Object> parseExceptionInfo(String errorCode, String errorMsg, Object data) {
 		Map<String, Object> resultMap = MapUtils.newMap();
 
