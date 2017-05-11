@@ -17,4 +17,25 @@ GNU General Public License v3.0
 
 ## 后续定制二次开发说明
 1.当前编译版本为 jdk1.8  
-2.部署时更改下相关配置文件   
+2.部署时更改下相关配置文件  
+
+ **技术选型：**  
+   
+	核心框架：Spring Framework 4.2   
+	视图框架：Spring MVC 4.2   
+	安全权限框架：Apache Shiro 1.3   
+	持久层框架：MyBatis 3.3   
+	定时器：Quartz 2.2   
+	数据库连接池：Druid 1.0   
+	日志管理：SLF4J 1.7、Log4j   
+	页面交互：Vue2.x   
+   
+
+ **软件需求** 
+    
+	jdk1.7+ 
+	MySQL5.5+     
+	Tomcat7.0+     
+	Maven3.0.5+  
+
+ 
