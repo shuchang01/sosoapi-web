@@ -31,11 +31,11 @@ GNU General Public License v3.0
 	页面交互：Vue2.x   
    
 
- **软件需求** 
+ **软件需求(推荐)** 
     
-	jdk1.7+ 
-	MySQL5.5+     
-	Tomcat7.0+     
-	Maven3.0.5+  
+	jdk1.8+ 
+	Tomcat8.0+     
+	Maven3.2.1+  
+	MySQL5.7+     
 
  
