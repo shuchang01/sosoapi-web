@@ -89,8 +89,8 @@
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 	
-	<!-- 异常处理-->
-	<bean id="exceptionResolver" class="com.dev.base.exception.handler.BaseExceptionHandler" />
+	<!-- 统一异常处理，注释掉这里的配置，启用spring注解自动扫描的方式 -->
+<!-- 	<bean id="exceptionResolver" class="com.dev.base.exception.handler.BaseExceptionHandler" /> -->
 
 	<!-- MVC拦截器 -->	
 	<mvc:interceptors>

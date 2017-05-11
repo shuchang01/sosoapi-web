@@ -5,8 +5,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,71 +23,77 @@ import com.dev.base.utils.MapUtils;
 
 /**
  * 
-		* <p>Title: 异常处理</p>
-		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
-		* <p>CreateDate: 2015年7月11日下午1:56:03</p>
+ * <p>
+ * Title: 异常处理
+ * </p>
+ * <p>
+ * Description: 描述（简要描述类的职责、实现方式、使用注意事项等）
+ * </p>
+ * <p>
+ * CreateDate: 2015年7月11日下午1:56:03
+ * </p>
  */
+@Component
 public class BaseExceptionHandler implements HandlerExceptionResolver {
-	private static Logger logger = LogManager.getLogger(BaseExceptionHandler.class);
 	
-	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, 
-											Object handler,Exception ex) {
+	private static Logger logger = LoggerFactory.getLogger(BaseExceptionHandler.class);
+
+	@Override
+	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
+			Exception ex) {
 		logger.error("请求处理失败：" + WebUtil.getClientIp(request) + "\t" + request.getRequestURI());
-		
-		//判断是否是ajax请求
+
+		// 判断是否是ajax请求
 		boolean isAjaxReq = WebUtil.isAjaxReq(request);
-		//组装错误信息
-		Map<String,Object> errorInfo = parseErrorInfo(ex);
-		//组装跳转页面
+		
+		// 组装错误信息
+		Map<String, Object> errorInfo = parseErrorInfo(ex);
+		
+		// 组装跳转页面
 		String viewName = parseViewName(ex, isAjaxReq);
-		
-		ModelAndView result = new ModelAndView();
-		result.setViewName(viewName);
-		result.addAllObjects(errorInfo);
-		
+
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName(viewName);
+		mv.addAllObjects(errorInfo);
+		// 异常堆栈信息需要打印出来，以便于trouble shooting
 		ex.printStackTrace();
-		
-		return result;
+		return mv;
 	}
 
-	//组装错误信息
-	private Map<String, Object> parseErrorInfo(Exception ex){
-		Map<String,Object> errorInfo = MapUtils.newMap();
-		if (ex instanceof BaseRuntimeException) {//自定义异常
-			BaseRuntimeException exception = (BaseRuntimeException)ex;
-			errorInfo = parseExceptionInfo(exception.getErrorCode(), 
-					exception.getErrorMsg(), exception.getData());
-		}
-		else {//其他异常
+	// 组装错误信息
+	private Map<String, Object> parseErrorInfo(Exception ex) {
+		Map<String, Object> errorInfo = MapUtils.newMap();
+		if (ex instanceof BaseRuntimeException) {// 自定义异常
+			BaseRuntimeException exception = (BaseRuntimeException) ex;
+			errorInfo = parseExceptionInfo(exception.getErrorCode(), exception.getErrorMsg(), exception.getData());
+		} else {// 其他异常
 			errorInfo = parseExceptionInfo(ErrorCode.BUSY, null, null);
 		}
-		
+
 		return errorInfo;
 	}
-	
-	//组装跳转的页面
-	private String parseViewName(Exception ex,boolean isAjaxReq){
-		//ajax请求对应的页面
+
+	// 组装跳转的页面
+	private String parseViewName(Exception ex, boolean isAjaxReq) {
+		// ajax请求对应的页面
 		if (isAjaxReq) {
 			return "forward:/jsp/error/ajax.jsp";
 		}
-		
-		//非ajax请求对应的页面
+
+		// 非ajax请求对应的页面
 		String viewName = "forward:/jsp/error/error.jsp";
-		if (ex instanceof SessionTimeoutException) {//登陆超时异常
+		if (ex instanceof SessionTimeoutException) {// 登陆超时异常
 			viewName = "forward:/forwardLogin.htm";
-		}
-		else if (ex instanceof AuthException) {//无权限异常
+		} else if (ex instanceof AuthException) {// 无权限异常
 			viewName = "forward:/jsp/error/403.jsp";
+		} else if (ex instanceof TipException) {// 用户提示信息异常
+			viewName = ((TipException) ex).getViewName();
 		}
-		else if (ex instanceof TipException) {//用户提示信息异常
-			viewName = ((TipException)ex).getViewName();
-		}
-		
+
 		return viewName;
 	}
-	
-	//组装异常信息
+
+	// 组装异常信息
 	private Map<String, Object> parseExceptionInfo(String errorCode, String errorMsg, Object data) {
 		Map<String, Object> resultMap = MapUtils.newMap();
 
