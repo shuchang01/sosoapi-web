@@ -66,7 +66,7 @@ public class LogFilter implements Filter {
 		}
 		
 		logger.info("======>RequestURI:" + uri);
-		logger.error(uri + "\r\n" + JsonUtils.toFormatJson(paramMap));
+		logger.info(uri + "\r\n" + JsonUtils.toFormatJson(paramMap));
 		chain.doFilter(req, resp);
 	}
 }
