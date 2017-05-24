@@ -13,43 +13,33 @@
 	http://www.springframework.org/schema/tx
 	http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
 
-	<!-- 统计用户，每天零点 -->
+	<!-- 任务1: 统计用户，每天零点 -->
 	<bean id="cubeTimerJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="cubeTimer"></property>
 		<property name="targetMethod" value="cubeUser"></property>
 	</bean>
-
 	<bean id="cubeTimerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail">
-			<ref bean="cubeTimerJobDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>59 59 23 * * ?</value>
-		</property>
+		<property name="jobDetail" ref="cubeTimerJobDetail"></property>
+		<property name="cronExpression" value="59 59 23 * * ?"></property>
 	</bean>
 
-	<!-- 锁定用户解锁，每天零点 -->
+	<!-- 任务2: 解锁被锁定用户账号，每天零点 -->
 	<bean id="userTimerJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="userTimer"></property>
 		<property name="targetMethod" value="unlock"></property>
 	</bean>
-
 	<bean id="userTimerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail">
-			<ref bean="userTimerJobDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>0 5 0 * * ?</value>
-		</property>
+		<property name="jobDetail" ref="userTimerJobDetail"></property>
+		<property name="cronExpression" value="0 5 0 * * ?"></property>
 	</bean>
 
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<!-- 统计相关 -->
+				<!-- 任务1：统计用户 -->
 				<ref bean="cubeTimerTrigger" />
 
-				<!-- 用户相关 -->
+				<!-- 任务2: 解锁被锁定用户账号 -->
 				<ref bean="userTimerTrigger" />
 			</list>
 		</property>
