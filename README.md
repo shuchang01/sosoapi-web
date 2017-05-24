@@ -3,6 +3,7 @@
 ### 关于SosoApi:  
 SIMPLE ONLINE,SIMPLE OFFLINE，专注于API接口文档管理及线上线下测试的API服务在线工具。  
 SosoApi网站：www.sosoapi.com  
+用户手册：http://www.sosoapi.com/pass/help/manual.htm   
 论坛：bbs.sosoapi.com  
 qq群：305629848  
 
