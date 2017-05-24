@@ -233,7 +233,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>sosoapi-web</finalName>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 		
 		<filters>
 			<filter>src/main/filters/filter-${env}.properties</filter>
