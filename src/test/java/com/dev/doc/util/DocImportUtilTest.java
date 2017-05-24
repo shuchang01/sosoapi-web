@@ -1,7 +1,5 @@
 package com.dev.doc.util;
 
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +13,12 @@ import com.dev.doc.entity.ApiDoc;
 import com.dev.doc.entity.Module;
 import com.dev.doc.entity.RespSchema;
 
+
 public class DocImportUtilTest {
+	
 	private Map<String, Object> swaggerInfo = null;
 	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void init() throws Exception{
 		String fileName = "src\\main\\webapp\\swagger\\json\\sosoapi_demo.json";
