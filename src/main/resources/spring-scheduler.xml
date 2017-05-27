@@ -18,6 +18,7 @@
 		<property name="targetObject" ref="cubeTimer"></property>
 		<property name="targetMethod" value="cubeUser"></property>
 	</bean>
+	<!-- 任务1的表达式触发器 -->
 	<bean id="cubeTimerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="cubeTimerJobDetail"></property>
 		<property name="cronExpression" value="59 59 23 * * ?"></property>
@@ -28,11 +29,13 @@
 		<property name="targetObject" ref="userTimer"></property>
 		<property name="targetMethod" value="unlock"></property>
 	</bean>
+	<!-- 任务2的表达式触发器 -->
 	<bean id="userTimerTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="userTimerJobDetail"></property>
 		<property name="cronExpression" value="0 5 0 * * ?"></property>
 	</bean>
 
+	<!-- 任务调度器工厂 -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
