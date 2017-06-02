@@ -8,6 +8,10 @@ File Encoding         : 65001
 Date: 2016-07-18 16:54:22
 */
 
+create database `db_sosoapi` default character set utf8 collate utf8_general_ci;
+
+USE db_sosoapi;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
